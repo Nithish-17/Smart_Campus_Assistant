@@ -105,64 +105,45 @@ The system ensures that AI responses are **based only on the student’s uploade
 ---
 
 ## 📦 Project Architecture
-+---------------------------+
-|        User / Client      |
-| (Browser / Postman / UI)  |
-+-------------+-------------+
-              |
-              | HTTP / JSON / Multipart
-              v
-+---------------------------+
-|     Spring Boot Backend   |
-|                           |
-|  +---------------------+ |
-|  |   Controller Layer  | |
-|  |  - Auth Controller  | |
-|  |  - Upload API       | |
-|  |  - Query API (RAG)  | |
-|  |  - Summary / Quiz   | |
-|  +----------+----------+ |
-|             |            |
-|  +----------v----------+ |
-|  |    Service Layer     | |
-|  |  - PDF Processing   | |
-|  |  - Chunking Logic   | |
-|  |  - Embedding Logic  | |
-|  |  - RAG Retrieval    | |
-|  |  - Quiz Generator   | |
-|  +----------+----------+ |
-|             |            |
-|  +----------v----------+ |
-|  |    AI Integration    | |
-|  | (Spring AI /        | |
-|  |  LangChain4j)       | |
-|  |  - Embeddings       | |
-|  |  - Prompt Templates | |
-|  |  - LLM API Calls    | |
-|  +----------+----------+ |
-|             |            |
-|  +----------v----------+ |
-|  |  Data Access Layer   | |
-|  | (JPA / Repositories)| |
-|  +----------+----------+ |
-+-------------+-------------+
-              |
-              |
-              v
-+---------------------------+
-| PostgreSQL Database       |
-| +-----------------------+ |
-| | users                 | |
-| | documents             | |
-| | text_chunks           | |
-| | embeddings (pgvector) | |
-| | quizzes / summaries   | |
-| +-----------------------+ |
-+-------------+-------------+
-              |
-              |
-              v
-+---------------------------+
-|   LLM Provider (External) |
-| OpenAI / Gemini / Claude |
-+---------------------------+
+┌───────────────────────────┐
+│        Client / User       │
+│ (Browser / Swagger / UI)  │
+└──────────────┬────────────┘
+               │ HTTP / JSON / Multipart
+┌──────────────▼────────────┐
+│      Spring Boot App       │
+├───────────────────────────┤
+│ Controller Layer           │
+│ - Auth Controller          │
+│ - Upload Controller        │
+│ - Query Controller         │
+├───────────────────────────┤
+│ Service Layer              │
+│ - PDF Processing           │
+│ - Text Chunking            │
+│ - Embedding Generation     │
+│ - RAG Retrieval            │
+│ - Summary / Quiz Logic     │
+├───────────────────────────┤
+│ AI Integration Layer       │
+│ - Spring AI / LangChain4j  │
+│ - Prompt Templates         │
+│ - LLM API Calls            │
+├───────────────────────────┤
+│ Data Access Layer          │
+│ - JPA / Repositories       │
+└──────────────┬────────────┘
+               │
+┌──────────────▼────────────┐
+│     PostgreSQL Database    │
+│ - users                    │
+│ - documents                │
+│ - text_chunks              │
+│ - embeddings (pgvector)    │
+│ - quizzes / summaries      │
+└──────────────┬────────────┘
+               │
+┌──────────────▼────────────┐
+│   External LLM Provider    │
+│ (OpenAI / Gemini / Claude)│
+└───────────────────────────┘
